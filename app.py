@@ -27,10 +27,14 @@ def render_about() -> None:
     st.markdown(
         """
         ### 🔍 Forward Chaining
-        Metode penalaran yang bekerja dari **fakta atau gejala** yang dipilih pengguna dan merangkai aturan untuk mencapai kesimpulan/hipotesis penyakit yang paling sesuai.
+        Metode penalaran yang bekerja dari **fakta atau gejala** yang dipilih pengguna, lalu mengevaluasi **rule IF-THEN** sampai didapat kandidat penyakit yang valid.
+
+        Pada aplikasi ini, forward chaining dijalankan dalam dua bentuk rule:
+        - **Rule inti**: butuh minimal dua gejala khas untuk mengaktifkan kandidat penyakit.
+        - **Rule sinyal kuat**: untuk gejala yang sangat khas dan cukup kuat memicu kandidat sendiri.
 
         ### 📊 Certainty Factor
-        Metode yang digunakan untuk merepresentasikan dan mengakumulasi **tingkat keyakinan** (baik dari pakar maupun pengguna) terhadap suatu gejala.
+        Setelah rule forward chaining terpenuhi, Certainty Factor digunakan untuk merepresentasikan dan mengakumulasi **tingkat keyakinan** (baik dari pakar maupun pengguna) terhadap gejala yang mendukung kandidat penyakit tersebut.
         
         **Formula utama yang digunakan:**
         - `CF(H,E) = CF_Pakar x CF_User`

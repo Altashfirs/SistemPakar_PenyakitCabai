@@ -5,16 +5,16 @@
     "expected_top_code": "P1",
     "expected_label": "Tidak Ada",
     "max_expected_cf": 0.0,
-    "expected_second_code": "P2",
+    "expected_candidate_count": 0,
     "user_inputs": {}
   },
   {
     "case_id": "EDGE-SINGLE-SHARED-SYMPTOM",
-    "description": "Satu gejala bersama beberapa penyakit harus memilih bobot pakar tertinggi.",
-    "expected_top_code": "P4",
-    "expected_label": "Sangat Kuat",
-    "min_expected_cf": 0.9,
-    "expected_second_code": "P7",
+    "description": "Satu gejala umum tanpa rule sinyal khusus tidak boleh langsung menghasilkan kandidat penyakit.",
+    "expected_top_code": "P1",
+    "expected_label": "Tidak Ada",
+    "max_expected_cf": 0.0,
+    "expected_candidate_count": 0,
     "user_inputs": {
       "G12": 1.0
     }
@@ -25,7 +25,7 @@
     "expected_top_code": "P1",
     "expected_label": "Sangat Kuat",
     "min_expected_cf": 0.97,
-    "expected_second_code": "P5",
+    "expected_candidate_count": 1,
     "user_inputs": {
       "G02": 1.0,
       "G04": 0.9,
@@ -39,6 +39,7 @@
     "expected_label": "Sangat Kuat",
     "min_expected_cf": 0.95,
     "expected_second_code": "P5",
+    "expected_candidate_count": 2,
     "user_inputs": {
       "G05": 1.0,
       "G16": 0.9
@@ -50,7 +51,7 @@
     "expected_top_code": "P4",
     "expected_label": "Sangat Kuat",
     "min_expected_cf": 0.95,
-    "expected_second_code": "P7",
+    "expected_candidate_count": 1,
     "user_inputs": {
       "G12": 1.0,
       "G23": 0.8
@@ -63,6 +64,7 @@
     "expected_label": "Sangat Kuat",
     "min_expected_cf": 0.97,
     "expected_second_code": "P3",
+    "expected_candidate_count": 2,
     "user_inputs": {
       "G21": 1.0,
       "G22": 1.0,
@@ -72,10 +74,10 @@
   {
     "case_id": "EDGE-LOW-CONFIDENCE",
     "description": "Evidence sangat lemah harus tetap menghasilkan label tidak ada.",
-    "expected_top_code": "P3",
+    "expected_top_code": "P1",
     "expected_label": "Tidak Ada",
     "max_expected_cf": 0.19,
-    "expected_second_code": "P4",
+    "expected_candidate_count": 0,
     "user_inputs": {
       "G11": 0.2
     }
@@ -86,7 +88,7 @@
     "expected_top_code": "P4",
     "expected_label": "Sangat Kuat",
     "min_expected_cf": 0.97,
-    "expected_second_code": "P2",
+    "expected_candidate_count": 1,
     "user_inputs": {
       "G12": 1.0,
       "G14": 0.9
@@ -99,6 +101,7 @@
     "expected_label": "Sangat Kuat",
     "min_expected_cf": 0.97,
     "expected_second_code": "P2",
+    "expected_candidate_count": 2,
     "user_inputs": {
       "G05": 0.8,
       "G06": 0.6,

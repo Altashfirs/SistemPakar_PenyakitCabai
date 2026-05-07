@@ -10,7 +10,7 @@ import streamlit as st
 
 from data.knowledge_base import SYMPTOM_GROUPS, SYMPTOMS
 from data.recommendations import RECOMMENDATIONS
-from engine.cf_engine import build_detail_rows, build_ranking_rows, forward_chaining
+from engine.cf_engine import build_detail_rows, build_ranking_rows, build_rule_rows, forward_chaining
 from engine.excel_generator import generate_excel_report
 
 
@@ -64,7 +64,7 @@ def render_diagnosis() -> None:
 
     centered = st.columns([1, 2, 1])
     with centered[1]:
-        diagnose_clicked = st.button("🔍 Diagnosa Sekarang", type="primary", use_container_width=True)
+        diagnose_clicked = st.button("🔍 Diagnosa Sekarang", type="primary", width="stretch")
 
     if diagnose_clicked:
         if selected_symptoms == 0:
@@ -89,7 +89,7 @@ def render_diagnosis() -> None:
     if st.session_state["diagnosis_history"]:
         st.markdown('<div class="custom-card">', unsafe_allow_html=True)
         st.subheader("🕒 Riwayat Diagnosis Sesi")
-        st.dataframe(pd.DataFrame(st.session_state["diagnosis_history"]), use_container_width=True)
+        st.dataframe(pd.DataFrame(st.session_state["diagnosis_history"]), width="stretch")
         st.markdown('</div>', unsafe_allow_html=True)
 
 
@@ -140,7 +140,7 @@ def _render_results(results: dict[str, dict], user_inputs: dict[str, float]) -> 
         st.markdown('<div class="custom-card">', unsafe_allow_html=True)
         st.subheader("📋 Tabel Ranking")
         ranking_rows = build_ranking_rows(results)
-        st.dataframe(pd.DataFrame(ranking_rows), use_container_width=True)
+        st.dataframe(pd.DataFrame(ranking_rows), width="stretch")
         st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
@@ -150,10 +150,19 @@ def _render_results(results: dict[str, dict], user_inputs: dict[str, float]) -> 
             st.markdown(f"- {recommendation}")
         st.markdown('</div>', unsafe_allow_html=True)
 
+    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+    st.subheader("🧠 Rule Forward Chaining")
+    rule_rows = build_rule_rows(results)
+    if rule_rows:
+        st.dataframe(pd.DataFrame(rule_rows), width="stretch")
+    else:
+        st.info("Tidak ada rule forward chaining yang terpenuhi.")
+    st.markdown('</div>', unsafe_allow_html=True)
+
     with st.expander("⚙️ Detail Perhitungan Certainty Factor"):
         detail_rows = build_detail_rows(results)
         if detail_rows:
-            st.dataframe(pd.DataFrame(detail_rows), use_container_width=True)
+            st.dataframe(pd.DataFrame(detail_rows), width="stretch")
         else:
             st.info("Tidak ada detail perhitungan karena tidak ada gejala yang cocok.")
 
@@ -164,5 +173,5 @@ def _render_results(results: dict[str, dict], user_inputs: dict[str, float]) -> 
         data=excel_bytes,
         file_name="Laporan_Diagnosis_Cabai.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        use_container_width=True,
+        width="stretch",
     )

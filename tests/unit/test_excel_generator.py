@@ -13,7 +13,7 @@ def test_generate_excel_report_contains_expected_sheets_and_summary() -> None:
     report_bytes = generate_excel_report(results, user_inputs)
     workbook = load_workbook(BytesIO(report_bytes))
 
-    assert workbook.sheetnames == ["Ringkasan", "Ranking", "Input Gejala", "Detail CF"]
+    assert workbook.sheetnames == ["Ringkasan", "Ranking", "Input Gejala", "Detail CF", "Rule FC"]
 
     summary_sheet = workbook["Ringkasan"]
     assert summary_sheet["A2"].value == "Penyakit Utama"
@@ -32,6 +32,10 @@ def test_generate_excel_report_contains_expected_sheets_and_summary() -> None:
     detail_sheet = workbook["Detail CF"]
     assert detail_sheet["A1"].value == "Kode Penyakit"
     assert detail_sheet.max_row > 1
+
+    rule_sheet = workbook["Rule FC"]
+    assert rule_sheet["A1"].value == "Kode Penyakit"
+    assert rule_sheet.max_row > 1
 
 
 def test_generate_excel_report_handles_no_selected_symptom_rows() -> None:

@@ -9,7 +9,7 @@ from openpyxl.styles import Font
 
 from data.knowledge_base import SYMPTOMS
 from data.recommendations import RECOMMENDATIONS
-from engine.cf_engine import build_detail_rows, build_ranking_rows
+from engine.cf_engine import build_detail_rows, build_ranking_rows, build_rule_rows
 
 
 def _write_sheet(ws, title: str, headers: list[str], rows: list[list]):
@@ -72,6 +72,18 @@ def generate_excel_report(results: dict[str, dict], user_inputs: dict[str, float
         )
     else:
         _write_sheet(detail_sheet, "Detail CF", ["Info"], [["Tidak ada detail perhitungan."]])
+
+    rule_rows = build_rule_rows(results)
+    rules_sheet = workbook.create_sheet()
+    if rule_rows:
+        _write_sheet(
+            rules_sheet,
+            "Rule FC",
+            list(rule_rows[0].keys()),
+            [list(row.values()) for row in rule_rows],
+        )
+    else:
+        _write_sheet(rules_sheet, "Rule FC", ["Info"], [["Tidak ada rule yang terpenuhi."]])
 
     output = BytesIO()
     workbook.save(output)
