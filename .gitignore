@@ -1,0 +1,4 @@
+.venv
+PRD_WebApp_SistemPakar_Cabai.md
+__pycache__/
+*.pyc

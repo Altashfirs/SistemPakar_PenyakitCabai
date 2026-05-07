@@ -1,0 +1,109 @@
+[
+  {
+    "case_id": "EDGE-EMPTY-INPUT",
+    "description": "Engine menerima input kosong dan harus mengembalikan semua CF nol dengan label tidak ada.",
+    "expected_top_code": "P1",
+    "expected_label": "Tidak Ada",
+    "max_expected_cf": 0.0,
+    "expected_second_code": "P2",
+    "user_inputs": {}
+  },
+  {
+    "case_id": "EDGE-SINGLE-SHARED-SYMPTOM",
+    "description": "Satu gejala bersama beberapa penyakit harus memilih bobot pakar tertinggi.",
+    "expected_top_code": "P4",
+    "expected_label": "Sangat Kuat",
+    "min_expected_cf": 0.9,
+    "expected_second_code": "P7",
+    "user_inputs": {
+      "G12": 1.0
+    }
+  },
+  {
+    "case_id": "EDGE-FRUIT-OVERLAP",
+    "description": "Gejala buah overlap antara antraknosa dan phytophthora tetap harus memprioritaskan antraknosa.",
+    "expected_top_code": "P1",
+    "expected_label": "Sangat Kuat",
+    "min_expected_cf": 0.97,
+    "expected_second_code": "P5",
+    "user_inputs": {
+      "G02": 1.0,
+      "G04": 0.9,
+      "G25": 0.8
+    }
+  },
+  {
+    "case_id": "EDGE-WILT-OVERLAP",
+    "description": "Gejala layu bersama batang gelap harus menempatkan fusarium sedikit di atas phytophthora.",
+    "expected_top_code": "P2",
+    "expected_label": "Sangat Kuat",
+    "min_expected_cf": 0.95,
+    "expected_second_code": "P5",
+    "user_inputs": {
+      "G05": 1.0,
+      "G16": 0.9
+    }
+  },
+  {
+    "case_id": "EDGE-LEAF-OVERLAP",
+    "description": "Klorosis dan gugur daun harus mengarah ke virus kuning walau alternaria ikut aktif.",
+    "expected_top_code": "P4",
+    "expected_label": "Sangat Kuat",
+    "min_expected_cf": 0.95,
+    "expected_second_code": "P7",
+    "user_inputs": {
+      "G12": 1.0,
+      "G23": 0.8
+    }
+  },
+  {
+    "case_id": "EDGE-ALTERNARIA-VS-CERCOSPORA",
+    "description": "Bercak konsentris dengan onset daun tua harus memprioritaskan alternaria di atas cercospora.",
+    "expected_top_code": "P7",
+    "expected_label": "Sangat Kuat",
+    "min_expected_cf": 0.97,
+    "expected_second_code": "P3",
+    "user_inputs": {
+      "G21": 1.0,
+      "G22": 1.0,
+      "G10": 0.6
+    }
+  },
+  {
+    "case_id": "EDGE-LOW-CONFIDENCE",
+    "description": "Evidence sangat lemah harus tetap menghasilkan label tidak ada.",
+    "expected_top_code": "P3",
+    "expected_label": "Tidak Ada",
+    "max_expected_cf": 0.19,
+    "expected_second_code": "P4",
+    "user_inputs": {
+      "G11": 0.2
+    }
+  },
+  {
+    "case_id": "EDGE-VIRUS-VS-FUSARIUM",
+    "description": "Klorosis dan kerdil overlap harus tetap mengutamakan virus kuning.",
+    "expected_top_code": "P4",
+    "expected_label": "Sangat Kuat",
+    "min_expected_cf": 0.97,
+    "expected_second_code": "P2",
+    "user_inputs": {
+      "G12": 1.0,
+      "G14": 0.9
+    }
+  },
+  {
+    "case_id": "EDGE-PHYTO-VS-FUSARIUM",
+    "description": "Kombinasi akar dan pangkal batang busuk harus menempatkan phytophthora di atas fusarium.",
+    "expected_top_code": "P5",
+    "expected_label": "Sangat Kuat",
+    "min_expected_cf": 0.97,
+    "expected_second_code": "P2",
+    "user_inputs": {
+      "G05": 0.8,
+      "G06": 0.6,
+      "G07": 0.8,
+      "G17": 0.7
+    }
+  }
+]
