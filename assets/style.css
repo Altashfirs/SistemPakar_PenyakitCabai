@@ -1,21 +1,20 @@
-/* Main theme overrides */
-[data-testid="stAppViewContainer"] {
-    background-color: #f4f7f6;
-}
-
-[data-testid="stSidebar"] {
-    background-color: #2b3a42;
-    color: white;
-}
-
-[data-testid="stSidebar"] * {
-    color: white !important;
-}
-
+/* Main theme overrides for Light/Dark mode compatibility */
 h1, h2, h3 {
     color: #e63946;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: 700;
+}
+
+/* Sidebar Styling Enhancement */
+[data-testid="stSidebar"] {
+    /* Using Streamlit's native secondary background color */
+    background-color: var(--secondary-background-color);
+    border-right: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+[data-testid="stSidebar"] hr {
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 /* Custom buttons */
@@ -24,6 +23,13 @@ button[kind="primary"] {
     color: white !important;
     border-radius: 8px !important;
     font-weight: bold !important;
+    border: none !important;
+    transition: all 0.3s ease;
+}
+
+button[kind="primary"]:hover {
+    background-color: #c62828 !important;
+    box-shadow: 0 4px 8px rgba(230, 57, 70, 0.3);
 }
 
 /* Metric cards */
@@ -34,13 +40,23 @@ button[kind="primary"] {
 /* Info box customization */
 div.stAlert {
     border-radius: 10px;
+    border: 1px solid rgba(128, 128, 128, 0.2);
 }
 
 /* Custom card container for generic use */
 .custom-card {
-    background-color: white;
+    background-color: var(--secondary-background-color);
+    color: var(--text-color);
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     margin-bottom: 1rem;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    transition: background-color 0.3s, color 0.3s;
 }
+
+/* Fix for links in dark/light mode */
+.custom-card a {
+    color: #e63946;
+}
+

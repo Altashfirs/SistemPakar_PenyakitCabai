@@ -46,18 +46,32 @@ def render_about() -> None:
 
 def main() -> None:
     with st.sidebar:
-        st.title("Navigasi")
+        st.markdown(
+            """
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h1 style="margin-bottom: 0;">🌶️ SiPakar</h1>
+                <p style="color: gray; font-size: 0.9em; margin-top: 0;">Pakar Cabai Cerdas</p>
+            </div>
+            <hr>
+            """,
+            unsafe_allow_html=True
+        )
+        st.subheader("📌 Navigasi")
         menu = st.radio(
             "Pilih halaman",
-            ["Home", "Diagnosis", "Info Penyakit", "Tentang Metode"],
+            ["🏠 Home", "🩺 Diagnosis", "📚 Info Penyakit", "🤖 Tentang Metode"],
             label_visibility="collapsed",
         )
+        
+        st.markdown("<hr>", unsafe_allow_html=True)
+        st.caption("Versi 1.0.0")
+        st.caption("© 2026 SiPakar Cabai")
 
-    if menu == "Home":
+    if menu == "🏠 Home":
         render_home()
-    elif menu == "Diagnosis":
+    elif menu == "🩺 Diagnosis":
         render_diagnosis()
-    elif menu == "Info Penyakit":
+    elif menu == "📚 Info Penyakit":
         render_info_penyakit()
     else:
         render_about()
