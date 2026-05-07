@@ -32,18 +32,20 @@ def _reset_form() -> None:
 def render_diagnosis() -> None:
     _init_state()
 
-    st.title("Diagnosis")
-    st.caption("Isi tingkat keyakinan gejala dari 0.0 sampai 1.0, lalu jalankan diagnosis.")
+    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+    st.title("🩺 Diagnosis Penyakit")
+    st.caption("Isi tingkat keyakinan gejala dari 0.0 (Tidak yakin/Tidak ada) sampai 1.0 (Sangat yakin), lalu jalankan diagnosis.")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     top_actions = st.columns([3, 1])
     with top_actions[1]:
-        if st.button("Reset Form", width="stretch"):
+        if st.button("🔄 Reset Form", width="stretch"):
             _reset_form()
             st.rerun()
 
     user_inputs = {}
     for group_name, symptom_codes in SYMPTOM_GROUPS.items():
-        with st.expander(group_name, expanded=True):
+        with st.expander(f"📌 {group_name}", expanded=True):
             cols = st.columns(2)
             for index, code in enumerate(symptom_codes):
                 with cols[index % 2]:
@@ -58,39 +60,43 @@ def render_diagnosis() -> None:
                     )
 
     selected_symptoms = sum(1 for value in user_inputs.values() if value > 0)
-    st.write(f"Gejala aktif: **{selected_symptoms}** dari **{len(SYMPTOMS)}**")
+    st.info(f"Gejala aktif saat ini: **{selected_symptoms}** dari **{len(SYMPTOMS)}** gejala tersedia.")
 
     centered = st.columns([1, 2, 1])
     with centered[1]:
-        diagnose_clicked = st.button("Diagnosa Sekarang", type="primary", width="stretch")
+        diagnose_clicked = st.button("🔍 Diagnosa Sekarang", type="primary", use_container_width=True)
 
     if diagnose_clicked:
         if selected_symptoms == 0:
-            st.warning("Pilih minimal satu gejala sebelum menjalankan diagnosis.")
+            st.warning("⚠️ Pilih minimal satu gejala sebelum menjalankan diagnosis.")
         else:
-            results = forward_chaining(user_inputs)
-            st.session_state["last_results"] = results
-            st.session_state["last_inputs"] = user_inputs.copy()
-            st.session_state["diagnosis_history"].insert(
-                0,
-                {
-                    "Waktu": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    "Penyakit Utama": next(iter(results.values()))["name"],
-                    "Persentase": next(iter(results.values()))["percentage"],
-                },
-            )
+            with st.spinner('Menganalisis gejala...'):
+                results = forward_chaining(user_inputs)
+                st.session_state["last_results"] = results
+                st.session_state["last_inputs"] = user_inputs.copy()
+                st.session_state["diagnosis_history"].insert(
+                    0,
+                    {
+                        "Waktu": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        "Penyakit Utama": next(iter(results.values()))["name"],
+                        "Persentase": next(iter(results.values()))["percentage"],
+                    },
+                )
 
     if st.session_state["last_results"] and st.session_state["last_inputs"]:
         _render_results(st.session_state["last_results"], st.session_state["last_inputs"])
 
     if st.session_state["diagnosis_history"]:
-        st.subheader("Riwayat Diagnosis Sesi")
-        st.dataframe(pd.DataFrame(st.session_state["diagnosis_history"]), width="stretch")
+        st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+        st.subheader("🕒 Riwayat Diagnosis Sesi")
+        st.dataframe(pd.DataFrame(st.session_state["diagnosis_history"]), use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 
 def _render_results(results: dict[str, dict], user_inputs: dict[str, float]) -> None:
-    st.divider()
-    st.header("Hasil Diagnosis")
+    st.markdown("---")
+    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+    st.header("🎯 Hasil Diagnosis")
 
     top_result = next(iter(results.values()))
     metrics = st.columns(4)
@@ -99,15 +105,17 @@ def _render_results(results: dict[str, dict], user_inputs: dict[str, float]) -> 
     metrics[2].metric("Certainty Factor", f"{top_result['cf_combined']:.4f}")
     metrics[3].metric("Tingkat Kepercayaan", f"{top_result['percentage']:.2f}%")
 
-    st.success(f"Interpretasi hasil utama: **{top_result['label']}**")
+    st.success(f"**Interpretasi Sistem:** {top_result['label']}")
+    st.markdown('</div>', unsafe_allow_html=True)
 
+    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
     fig = go.Figure(
         go.Bar(
             x=[value["percentage"] for value in results.values()],
             y=[value["name"] for value in results.values()],
             orientation="h",
             marker_color=[
-                "#C62828" if value["cf_combined"] >= 0.7 else "#E65100" if value["cf_combined"] >= 0.4 else "#455A64"
+                "#e63946" if value["cf_combined"] >= 0.7 else "#f4a261" if value["cf_combined"] >= 0.4 else "#2b3a42"
                 for value in results.values()
             ],
             text=[f"{value['percentage']}%" for value in results.values()],
@@ -115,35 +123,46 @@ def _render_results(results: dict[str, dict], user_inputs: dict[str, float]) -> 
         )
     )
     fig.update_layout(
-        title="Ranking Semua Penyakit",
+        title="📊 Ranking Semua Penyakit",
         xaxis_title="Tingkat Kepercayaan (%)",
         yaxis_title="Penyakit",
         height=420,
         margin={"l": 10, "r": 10, "t": 50, "b": 10},
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)"
     )
     fig.update_yaxes(autorange="reversed")
     st.plotly_chart(fig, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    st.subheader("Ranking Penyakit")
-    ranking_rows = build_ranking_rows(results)
-    st.dataframe(pd.DataFrame(ranking_rows), width="stretch")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+        st.subheader("📋 Tabel Ranking")
+        ranking_rows = build_ranking_rows(results)
+        st.dataframe(pd.DataFrame(ranking_rows), use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    st.subheader("Rekomendasi Penanganan")
-    for recommendation in RECOMMENDATIONS.get(top_result["code"], []):
-        st.write(f"- {recommendation}")
+    with col2:
+        st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+        st.subheader("💡 Rekomendasi Penanganan")
+        for recommendation in RECOMMENDATIONS.get(top_result["code"], []):
+            st.markdown(f"- {recommendation}")
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    st.subheader("Detail Perhitungan CF")
-    detail_rows = build_detail_rows(results)
-    if detail_rows:
-        st.dataframe(pd.DataFrame(detail_rows), width="stretch")
-    else:
-        st.info("Tidak ada detail perhitungan karena tidak ada gejala yang cocok.")
+    with st.expander("⚙️ Detail Perhitungan Certainty Factor"):
+        detail_rows = build_detail_rows(results)
+        if detail_rows:
+            st.dataframe(pd.DataFrame(detail_rows), use_container_width=True)
+        else:
+            st.info("Tidak ada detail perhitungan karena tidak ada gejala yang cocok.")
 
+    st.markdown("<br>", unsafe_allow_html=True)
     excel_bytes = generate_excel_report(results, user_inputs)
     st.download_button(
-        label="Download Laporan Excel",
+        label="📥 Download Laporan Excel",
         data=excel_bytes,
         file_name="Laporan_Diagnosis_Cabai.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        width="stretch",
+        use_container_width=True,
     )

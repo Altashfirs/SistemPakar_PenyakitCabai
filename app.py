@@ -14,25 +14,33 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+def load_css():
+    with open("assets/style.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+load_css()
+
 
 def render_about() -> None:
-    st.title("Tentang Metode")
+    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+    st.title("🤖 Tentang Metode")
     st.markdown(
         """
-        **Forward Chaining** bekerja dari gejala yang dipilih pengguna menuju hipotesis penyakit yang paling sesuai.
+        ### 🔍 Forward Chaining
+        Metode penalaran yang bekerja dari **fakta atau gejala** yang dipilih pengguna dan merangkai aturan untuk mencapai kesimpulan/hipotesis penyakit yang paling sesuai.
 
-        **Certainty Factor** dipakai untuk merepresentasikan tingkat keyakinan pakar dan pengguna pada setiap gejala.
-
-        Formula utama yang digunakan:
-
-        `CF(H,E) = CF_Pakar x CF_User`
-
-        `CF final = 1 - PRODUCT(1 - CFi)` untuk semua evidence positif.
+        ### 📊 Certainty Factor
+        Metode yang digunakan untuk merepresentasikan dan mengakumulasi **tingkat keyakinan** (baik dari pakar maupun pengguna) terhadap suatu gejala.
+        
+        **Formula utama yang digunakan:**
+        - `CF(H,E) = CF_Pakar x CF_User`
+        - `CF final = 1 - PRODUCT(1 - CFi)` (untuk semua *evidence* positif).
         """
     )
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.warning(
-        "Aplikasi ini adalah alat bantu diagnosis awal berbasis pengetahuan. Hasil tidak menggantikan pemeriksaan langsung oleh pakar pertanian."
+        "⚠️ **Disclaimer:** Aplikasi ini adalah alat bantu diagnosis awal berbasis pengetahuan. Hasil komputasi tidak menggantikan pemeriksaan fisik langsung oleh pakar pertanian atau otoritas terkait."
     )
 
 

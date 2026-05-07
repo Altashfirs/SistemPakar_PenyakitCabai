@@ -1,0 +1,46 @@
+/* Main theme overrides */
+[data-testid="stAppViewContainer"] {
+    background-color: #f4f7f6;
+}
+
+[data-testid="stSidebar"] {
+    background-color: #2b3a42;
+    color: white;
+}
+
+[data-testid="stSidebar"] * {
+    color: white !important;
+}
+
+h1, h2, h3 {
+    color: #e63946;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
+}
+
+/* Custom buttons */
+button[kind="primary"] {
+    background-color: #e63946 !important;
+    color: white !important;
+    border-radius: 8px !important;
+    font-weight: bold !important;
+}
+
+/* Metric cards */
+[data-testid="stMetricValue"] {
+    color: #e63946 !important;
+}
+
+/* Info box customization */
+div.stAlert {
+    border-radius: 10px;
+}
+
+/* Custom card container for generic use */
+.custom-card {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
