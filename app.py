@@ -2,9 +2,9 @@
 
 import streamlit as st
 
-from pages.diagnosis import render_diagnosis
-from pages.home import render_home
-from pages.info_penyakit import render_info_penyakit
+from views.diagnosis import render_diagnosis
+from views.home import render_home
+from views.info_penyakit import render_info_penyakit
 
 
 st.set_page_config(
